@@ -42,9 +42,6 @@ class BankAccount {
         cout<<"Balance: "<<balance<<endl;
         cout<<"Intrest Rate: "<<intrestRate<<endl;
     }
-
-    
-
 };
 
 int main(){
