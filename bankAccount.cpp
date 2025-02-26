@@ -24,6 +24,14 @@ class BankAccount {
         } 
     }
 
+    // Default Constructor
+    BankAccount() {
+        accountNumber = "000000000";
+        balance = 0.0;
+        cout << "Default Constructor Called!" << endl;
+    }
+
+
     BankAccount(string n, int a, double b, double i):name(n), accountNumber(a), balance(b), intrestRate(i){
         cout<<"Account for "<<n<<" created successfully !"<<endl;
     };
