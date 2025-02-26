@@ -26,7 +26,7 @@ class BankAccount {
 
     // Default Constructor
     BankAccount() {
-        accountNumber = "000000000";
+        accountNumber = 0;
         balance = 0.0;
         cout << "Default Constructor Called!" << endl;
     }
