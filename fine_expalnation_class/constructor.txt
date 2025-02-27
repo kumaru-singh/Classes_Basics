@@ -199,22 +199,94 @@ Notes:- The constructor is public, so objects can be created.
         }
 
 
+Notes:- Derived cannot access data directly, but it can still call Base constructor.
+
+
+|----------------------|---------|----------------------|
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|----------------------|---------|----------------------|
+
+
+
+ |
+ |- < Protected Constructor with Public Data Member>
+
+
+#include <iostream>
+using namespace std;
+
+class Base {
+protected:
+    Base(int x) : data(x) { cout << "Base Constructor Called\n"; }
+public:
+    int data;  // Public member variable
+};
+
+class Derived : public Base {
+public:
+    Derived(int x) : Base(x) { cout << "Derived Constructor Called\n"; }
+    
+    void show() {
+        cout << "Public Data: " << data << endl;
+    }
+};
+
+int main() {
+    Derived obj(10);
+    obj.show();
+    
+    // Base obj2(5);  // ❌ Error: Protected constructor cannot be accessed directly
+    return 0;
+}
+
+
 Notes:- 
 
 
-|----------------------|---------|----------------------|
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|                      |         |                      |
-|----------------------|---------|----------------------|
+
+ |
+ |- < Protected Constructor with Protected Data Member>
+
+
+#include <iostream>
+using namespace std;
+
+class Base {
+protected:
+    Base(int x) : data(x) { cout << "Base Constructor Called\n"; }
+protected:
+    int data;  // Protected member variable
+};
+
+class Derived : public Base {
+public:
+    Derived(int x) : Base(x) { cout << "Derived Constructor Called\n"; }
+    
+    void show() {
+        cout << "Protected Data: " << data << endl;
+    }
+};
+
+int main() {
+    Derived obj(20);
+    obj.show();
+    
+    // obj.data = 30; // ❌ Error: Cannot access protected member from outside the class
+    return 0;
+}
+
+
+
 
