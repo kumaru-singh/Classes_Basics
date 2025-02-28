@@ -1,0 +1,292 @@
+<Private Constructor>
+        class A {
+        private:
+            A() { std::cout << "Private Constructor (prc) called\n"; }
+        };
+
+Notes :-   Objects cannot be created outside the class.
+            It is useful for singleton classes or restricting object creation.
+
+ |
+ |- < Private Constructor with Public Data Member>
+        class H {
+        public:
+            int publicData;
+        private:
+            H(int x) { 
+                publicData = x;
+                std::cout << "Private Constructor (prc) with public data member\n"; 
+            }
+        public:
+            static H createInstance(int x) {
+                return H(x);
+            }
+        };
+        int main() {
+            // H obj(50); // ❌ Error: Private constructor
+            H obj = H::createInstance(50); // ✅ Allowed
+            std::cout << obj.publicData << std::endl; // ✅ Allowed
+        }
+
+
+Notes:- Private constructor blocks direct instantiation.  // prevents objects from being created directly outside the class.
+        Public data member is still accessible after controlled object creation.
+       *This pattern is useful for Singleton or controlled object creation scenarios.
+       *However, a static function inside the class can still create and return an instance because static functions belong to the class itself and can access private members, including the constructor.
+
+
+ |
+ |- < Private Constructor with Private Data Member>
+
+        class G {
+        private:
+            int secret;
+            G(int x) { 
+                secret = x;
+                std::cout << "Private Constructor (prc) with private data member\n"; 
+            }
+        public:
+            static G createInstance(int x) {
+                return G(x); // ✅ Allowed via factory function
+            }
+        };
+        int main() {
+            // G obj(40); // ❌ Error: Private constructor
+            G obj = G::createInstance(40); // ✅ Allowed
+        }
+
+Notes:- Private Constructor prevent direct object creation.
+        But a static function (createInstance) allows controlled creation.
+
+    |------------------------------------------------------------------------|
+    | Factory Function -    A factory function is a function that creates    |
+    |        and returns objects instead of allowing direct instantiation.   |
+    |------------------------------------------------------------------------|
+
+
+
+|
+|- < Private Constructor with Protected Data Member>
+
+            class I {
+            protected:
+                int protectedData;
+            private:
+                I(int x) { 
+                    protectedData = x;
+                    std::cout << "Private Constructor (prc) with protected data member\n"; 
+                }
+            public:
+                static I createInstance(int x) {
+                    return I(x);
+                }
+            };
+            int main() {
+                // I obj(60); // ❌ Error: Private constructor
+                I obj = I::createInstance(60); // ✅ Allowed
+                // std::cout << obj.protectedData; // ❌ Error: Protected data cannot be accessed outside class
+            }
+
+Notes:- Private Constructor blocks direct instantiation.
+        Protected data is only accessible in derived classes.
+
+
+
+|----------------------------------------------------------------|
+
+<Public Constructor>
+        class B {
+    public:
+        B() { std::cout << "Public Constructor (puc) called\n"; }
+    };
+    int main() {
+        B obj; // ✅ Allowed
+    }
+
+Notes:-     Allows users to create object freely.
+            Most common type of constructor.
+
+----------------->
+ |
+ |- < Public Constructor with Private Data Member>
+    class C {
+    private:
+        int secret;
+    public:
+        C(int x) { 
+            secret = x;
+            std::cout << "Public Constructor (puc) with private data member\n"; 
+        }
+    };
+    int main() {
+        C obj(10); // ✅ Allowed
+        // std::cout << obj.secret; // ❌ Error: secret is private
+    }
+
+Notes:- The constructor is public, so we can create an object directly.
+        But the private data member ( secret ) cannot be accessed directly.
+
+ |
+ |- < Public Constructor with Public Data Member>
+        class D {
+        public:
+            int publicData;
+            D(int x) { 
+                publicData = x;
+                std::cout << "Public Constructor (puc) with public data member\n"; 
+            }
+        };
+        int main() {
+            D obj(20); // ✅ Allowed
+            std::cout << obj.publicData << std::endl; // ✅ Allowed
+        }
+
+Notes:- The public constructor allows object creation.
+        The public data member means anyone can access or modify it.
+
+ |
+ |- < Public Constructor with Protected Data Member>
+        class F {
+        protected:
+            int protectedData;
+        public:
+            F(int x) { 
+                protectedData = x;
+                std::cout << "Public Constructor (puc) with protected data member\n"; 
+            }
+        };
+        int main() {
+            F obj(30); // ✅ Allowed
+            // std::cout << obj.protectedData; // ❌ Error: protectedData is protected
+        }
+
+
+Notes:- The constructor is public, so objects can be created.
+        The protected data member means only derived classes can access it.
+
+
+
+|----------------------------------------------------------------|
+
+
+<Protected Constructor>
+
+
+ |
+ |- < Protected Constructor with Private Data Member>
+
+        #include <iostream>
+
+        class A {
+        private:
+            int privateData;  // Private data member
+
+        protected:
+            A(int x) {  // Protected constructor
+                privateData = x;
+                std::cout << "A created with privateData: " << privateData << std::endl;
+            }
+        };
+
+        class DerivedA : public A {
+        public:
+            DerivedA(int x) : A(x) {}  // Derived class can access protected constructor
+        };
+
+        int main() {
+            // A obj(10); // ❌ Error: Cannot instantiate directly due to protected constructor
+            DerivedA obj(10); // ✅ Allowed via derived class
+        }
+
+
+Notes:- Derived cannot access data directly, but it can still call Base constructor.
+
+
+|----------------------|---------|----------------------|
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|                      |         |                      |
+|----------------------|---------|----------------------|
+
+
+
+ |
+ |- < Protected Constructor with Public Data Member>
+
+
+#include <iostream>
+using namespace std;
+
+class Base {
+protected:
+    Base(int x) : data(x) { cout << "Base Constructor Called\n"; }
+public:
+    int data;  // Public member variable
+};
+
+class Derived : public Base {
+public:
+    Derived(int x) : Base(x) { cout << "Derived Constructor Called\n"; }
+    
+    void show() {
+        cout << "Public Data: " << data << endl;
+    }
+};
+
+int main() {
+    Derived obj(10);
+    obj.show();
+    
+    // Base obj2(5);  // ❌ Error: Protected constructor cannot be accessed directly
+    return 0;
+}
+
+
+Notes:- 
+
+
+
+ |
+ |- < Protected Constructor with Protected Data Member>
+
+
+#include <iostream>
+using namespace std;
+
+class Base {
+protected:
+    Base(int x) : data(x) { cout << "Base Constructor Called\n"; }
+protected:
+    int data;  // Protected member variable
+};
+
+class Derived : public Base {
+public:
+    Derived(int x) : Base(x) { cout << "Derived Constructor Called\n"; }
+    
+    void show() {
+        cout << "Protected Data: " << data << endl;
+    }
+};
+
+int main() {
+    Derived obj(20);
+    obj.show();
+    
+    // obj.data = 30; // ❌ Error: Cannot access protected member from outside the class
+    return 0;
+}
+
+
+
+
